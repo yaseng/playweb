@@ -1,0 +1,220 @@
+<extend name="Public:base" />
+<block name="title">
+<title>{$project['target']} -扫描报告</title>
+</block>
+<block name="container">
+<style>
+#xxx{
+
+ 
+
+}
+</style>
+<script>
+	var project_hash = "{$project['project_hash']}";
+	var isScanning = 1;
+	$(function() {
+
+		setTimeout(getReport, 2000);
+		
+		 $('#chart').highcharts({
+	            chart: {
+	                plotBackgroundColor: null,
+	                plotBorderWidth: null,
+	                plotShadow: false,
+	                height:180,
+	                marginTop:-11
+	            },
+	            title: {
+	                text: ''
+	            },
+	            tooltip: {
+	        	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+	            },
+	            credits: {
+	            	enabled: false
+	            },
+	            plotOptions: {
+	                pie: {
+	                    allowPointSelect: true,
+	                    cursor: 'pointer',
+	                    dataLabels: {
+	                        enabled: false
+	                    },
+	                    showInLegend: true
+	                }
+	            },
+	            series: [{
+	                type: 'pie',
+	                name: '漏洞类型',
+	                data: [
+	                    ['高危',   45],
+	                    ['中危',       26.8],
+	                    {
+	                        name: '低危',
+	                        y: 12.8,
+	                        sliced: true,
+	                        selected: true
+	                    },
+	                    ['提示',    15.4]
+	              
+	                ]
+	            }]
+	        });
+ 
+
+	});
+	function getReport() {
+
+		if (isScanning == 1) {
+
+			setTimeout(getReport, 2000);
+			last_count = $("#vul-info tr").length + $("#sys-info tr").length - 2;
+			//last_count=1
+			$.get("?m=report&a=update&project_hash=" + project_hash
+					+ "&last_count=" + last_count, function(reports) {
+
+				if (typeof reports[0] == "object") {
+
+					for (i in reports) {
+
+						if(reports[i].type == "sys_info"){
+							$("#sys-info").append(
+									"<tr><td><span class=\"label label-info\">"
+											+ reports[i].port + "</span></td><td>"
+											+ reports[i].service + "</td><td>"
+											+ reports[i].info + "</td></tr>");		
+							
+						}else {
+							
+							$("#vul-info").append(
+									"<tr><td><span class=\"label label-important\">高危</span></td><td>"
+									+reports[i].type+"</td><td>"
+									+reports[i].info+"</td></tr>");
+							
+						}
+
+
+					}
+				}
+
+			});
+		}
+
+	}
+	function isEmpty(obj) {
+		for ( var name in obj) {
+			return false;
+		}
+		return true;
+	};
+</script>
+<div class="row"  id="xxx">
+<div class="span9">
+<div class="accordion-group" id="container-onfo">
+<div class="accordion-heading"><a href="#info"
+	data-parent="#accordionDetails" data-toggle="collapse"
+	class="accordion-toggle"><i class="icon-info-sign"></i> 任务信息</a></div>
+<div class="accordion-body in collapse" id="collapseAbstract"
+	style="height: auto;">
+<table class="table table-bordered table-hover  table-condensed">
+	<tbody>
+		<tr>
+			<td width="8%"><span class="label label-success">目标</span></td>
+			<td>{$project['target']}</td>
+		</tr>
+
+		<tr>
+			<td><span class="label label-success">进度</span></td>
+			<td id="xxx">20%</td>
+		</tr>
+		<tr>
+			<td><span class="label label-success">设置</span></td>
+			<td id="xxx"></td>
+		</tr>
+		<tr>
+			<td><span class="label label-success">操作</span></td>
+			<td>
+			<button type="button" class="btn btn-mini  btn-danger"
+				onclick=setting()>停止</button>
+			&nbsp;&nbsp;
+			<button type="button" class="btn btn-mini  btn-info"
+				onclick=setting()>打印</button>
+			&nbsp;&nbsp;
+
+			<button type="button" class="btn  btn-mini  btn-primary"
+				onclick=setting()>导出word</button>
+			&nbsp;&nbsp;
+
+			<button type="button" class="btn btn-mini  btn-success"
+				onclick=setting()>导出html</button>
+
+
+			</td>
+		</tr>
+	</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="span3" id="chart"   >表格</div>
+</div>
+
+<br>
+<table class="table table-bordered table-hover  table-condensed"
+	id="vul-info" class="table-report">
+	<thead>
+		<tr>
+			<th width="8%">等级</th>
+			<th width="10%">类型</th>
+			<th>详细信息</th>
+
+		</tr>
+	</thead>
+	<tbody>
+
+	</tbody>
+</table>
+
+
+
+<div class="accordion-group" id="container-sys-onfo">
+<div class="accordion-heading"><a href="#sys-info"
+	data-parent="#accordionDetails" data-toggle="collapse"
+	class="accordion-toggle"><i class="icon-info-sign"></i> 系统信息</a></div>
+<div class="accordion-body in collapse" id="collapseAbstract"
+	style="height: auto;">
+<table class="table table-bordered table-hover  table-condensed"
+	id="sys-info" class="table-report">
+	<thead>
+		<tr>
+			<th width="8%">端口</th>
+			<th width="10%">服务</th>
+			<th>详细信息</th>
+		</tr>
+	</thead>
+	<tbody>
+		<!-- 	<tr>
+			<td><span class="label label-info">21</span></td>
+			<td>ftp</td>
+			<td>xxx ftp login</td>
+		</tr>
+		<tr>
+			<td><span class="label label-info">80</span></td>
+			<td>web</td>
+			<td>server:iis 6.0 lang:asp</td>
+		</tr>
+		<tr>
+			<td><span class="label label-info">3306</span></td>
+			<td>mysql</td>
+			<td>mysql 5.6.1 log</td>
+		</tr>
+	 -->
+	</tbody>
+</table>
+</div>
+</div>
+
+
+<script type="text/javascript" src="__JS__/highcharts.js"></script>
+</block>

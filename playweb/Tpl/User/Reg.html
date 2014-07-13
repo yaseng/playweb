@@ -1,0 +1,58 @@
+<extend name="Public:base" />
+<block name="title">
+<title>用户注册 -PlayWeb</title>
+</block>
+<block name="res">
+<script>
+ 
+function login(){
+	
+  
+   $('#user-login').ajaxForm(function(d) {   
+   
+   if(d.status){
+	   
+	   u.msg(d.info,4,"index.php");
+	   
+   }else{
+	   
+	   u.msg(d.info,5);
+	   
+   }
+ 
+	  
+  });  
+	
+}
+
+
+
+</script>
+
+
+</block>
+<block name="container">
+<div  style="">
+ <form class="form-horizontal" method="post" action="{:U('User/on_reg')}" id="user-login">
+ <div class="control-group"><label class="control-label">用户名</label>
+ <div class="controls"><input type="text" name="username"></div>
+ </div>
+  <form class="form-horizontal" method="post" action="{:U('User/on_login')}" id="user-login">
+ <div class="control-group"><label class="control-label">游戏</label>
+ <div class="controls"><input type="text" name="email"></div>
+ </div>
+ <div class="control-group"><label class="control-label">密码</label>
+ <div class="controls"><input type="password" name="password"></div>
+ </div>
+  <div class="control-group"><label class="control-label">确认密码</label>
+ <div class="controls"><input type="password2" name="password2"></div>
+ </div>
+ <div class="control-group">
+ <div class="controls">
+ <button type="submit"  class="btn  btn btn-success" onclick="login()">注册</button>
+ </div>
+ </div>
+</form>
+
+</div>
+</block>
