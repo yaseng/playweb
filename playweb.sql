@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `pb_user` (
 --
 
 INSERT INTO `pb_user` (`uid`, `name`, `email`, `password`, `key`, `ip`, `user_hash`) VALUES
-(1, 'Yaseng', 'yaseng@uauc.net', '280cdd6f9854da616acb01', 1390034392, '', '68bc1fd5938fc77');
+(1, 'Yaseng', 'yaseng@uauc.net', '350cdd6f9854da616acb21', 1390034392, '', '68bc1fd5938fc77');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
